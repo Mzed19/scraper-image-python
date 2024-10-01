@@ -1,0 +1,7 @@
+flask
+flask-smorest
+python-dotenv
+easyocr
+Pillow
+pytesseract
+opencv-python
