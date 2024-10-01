@@ -4,7 +4,13 @@
 This project aims to scrape images with versatility.
 Download and help improve this tool.
 
-You can see more about this link: https://medium.com/@mdumont567/tool-for-scraping-text-from-images-with-versatility-f370dfff44bf
+#Build
 
-Send a image to: extract-text/easyocr or extract-text/pytesseract.
-Put a file image in a field called ¨image¨ on your request.
+- docker-compose up -d --build
+
+#How Use
+
+- Endpoints: extract-text/easyocr or extract-text/pytesseract.
+- Put a file image in a field called ¨image¨ and make a request.
+
+You can see more about this link: https://medium.com/@mdumont567/tool-for-scraping-text-from-images-with-versatility-f370dfff44bf
