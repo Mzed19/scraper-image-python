@@ -38,7 +38,6 @@ def extract_text(ocr_type):
         case _:
             return jsonify({'error': 'Invalid OCR type. Use "easyocr" or "pytesseract".'}), 400
 
-    # Retorna o texto extraído
     return jsonify({
         'ocr_type': ocr_type,
         'extracted_text': ' '.join(extracted_text) if isinstance(extracted_text, list) else extracted_text
