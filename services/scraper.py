@@ -33,6 +33,7 @@ def extract_text(ocr_type):
         case 'pytesseract':
             try:
                 extracted_text = pytesseract.image_to_string(image)
+                extracted_text = extracted_text.replace('\n', ' ')
             except Exception as e:
                 extracted_text = f"Erro no Tesseract: {str(e)}"
         case _:
