@@ -4,4 +4,5 @@ python-dotenv
 easyocr
 Pillow
 pytesseract
-opencv-python
+sqlalchemy
+flask-sqlalchemy
