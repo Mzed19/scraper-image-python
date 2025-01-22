@@ -200,7 +200,7 @@
         "kind": 2,
         "importPath": "services.scraper",
         "description": "services.scraper",
-        "peekOfCode": "def extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'No image file provided'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    image_np = np.array(image)\n    match ocr_type.lower():\n        case 'easyocr':",
+        "peekOfCode": "def extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'Teste'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    image_np = np.array(image)\n    match ocr_type.lower():\n        case 'easyocr':",
         "detail": "services.scraper",
         "documentation": {}
     },
@@ -209,7 +209,7 @@
         "kind": 5,
         "importPath": "services.scraper",
         "description": "services.scraper",
-        "peekOfCode": "scraper_bp = Blueprint(\"scraper\", __name__, description=\"Operações de OCR\")\neasyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\ndef extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'No image file provided'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''",
+        "peekOfCode": "scraper_bp = Blueprint(\"scraper\", __name__, description=\"Operações de OCR\")\neasyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\ndef extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'Teste'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''",
         "detail": "services.scraper",
         "documentation": {}
     },
@@ -218,7 +218,7 @@
         "kind": 5,
         "importPath": "services.scraper",
         "description": "services.scraper",
-        "peekOfCode": "easyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\ndef extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'No image file provided'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    image_np = np.array(image)",
+        "peekOfCode": "easyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\ndef extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'Teste'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    image_np = np.array(image)",
         "detail": "services.scraper",
         "documentation": {}
     },
@@ -236,7 +236,7 @@
         "kind": 2,
         "importPath": "src.services.scraper.scraper",
         "description": "src.services.scraper.scraper",
-        "peekOfCode": "def extract_text(ocr_type):\n    if 'image' not in request.files:\n        return jsonify({'error': 'No image file provided'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    match ocr_type.lower():\n        case ScraperLibs.EASYOCR.value:\n            extracted_text = use_easyocr(image)\n        case ScraperLibs.PYTESSERACT.value:",
+        "peekOfCode": "def extract_text(ocr_type):\n    if 'image' not in request.files:\n        return jsonify({'error': 'Erro'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    match ocr_type.lower():\n        case ScraperLibs.EASYOCR.value:\n            extracted_text = use_easyocr(image)\n        case ScraperLibs.PYTESSERACT.value:",
         "detail": "src.services.scraper.scraper",
         "documentation": {}
     },
@@ -263,7 +263,7 @@
         "kind": 5,
         "importPath": "src.services.scraper.scraper",
         "description": "src.services.scraper.scraper",
-        "peekOfCode": "scraper_bp = Blueprint(\"scraper\", __name__, description=\"Operações de OCR\")\neasyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\n@scraper_bp.response(200, ScraperFile)\ndef extract_text(ocr_type):\n    if 'image' not in request.files:\n        return jsonify({'error': 'No image file provided'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''",
+        "peekOfCode": "scraper_bp = Blueprint(\"scraper\", __name__, description=\"Operações de OCR\")\neasyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\n@scraper_bp.response(200, ScraperFile)\ndef extract_text(ocr_type):\n    if 'image' not in request.files:\n        return jsonify({'error': 'Erro'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''",
         "detail": "src.services.scraper.scraper",
         "documentation": {}
     },
@@ -272,7 +272,7 @@
         "kind": 5,
         "importPath": "src.services.scraper.scraper",
         "description": "src.services.scraper.scraper",
-        "peekOfCode": "easyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\n@scraper_bp.response(200, ScraperFile)\ndef extract_text(ocr_type):\n    if 'image' not in request.files:\n        return jsonify({'error': 'No image file provided'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    match ocr_type.lower():",
+        "peekOfCode": "easyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\n@scraper_bp.response(200, ScraperFile)\ndef extract_text(ocr_type):\n    if 'image' not in request.files:\n        return jsonify({'error': 'Erro'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    match ocr_type.lower():",
         "detail": "src.services.scraper.scraper",
         "documentation": {}
     },

@@ -16,7 +16,7 @@ easyocr_reader = easyocr.Reader(['en', 'pt'])
 def extract_text(ocr_type):
 
     if 'image' not in request.files:
-        return jsonify({'error': 'No image file provided'}), 400
+        return jsonify({'error': 'Erro'}), 400
 
     file = request.files['image']
     
