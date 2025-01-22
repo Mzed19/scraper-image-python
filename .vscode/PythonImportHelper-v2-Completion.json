@@ -1,18 +1,10 @@
 [
     {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
+        "label": "Enum",
+        "importPath": "enum",
+        "description": "enum",
         "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "jsonify",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
+        "detail": "enum",
         "documentation": {}
     },
     {
@@ -40,31 +32,7 @@
         "documentation": {}
     },
     {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
         "label": "Blueprint",
-        "importPath": "flask_smorest",
-        "description": "flask_smorest",
-        "isExtraImport": true,
-        "detail": "flask_smorest",
-        "documentation": {}
-    },
-    {
-        "label": "Blueprint",
-        "importPath": "flask_smorest",
-        "description": "flask_smorest",
-        "isExtraImport": true,
-        "detail": "flask_smorest",
-        "documentation": {}
-    },
-    {
-        "label": "Api",
         "importPath": "flask_smorest",
         "description": "flask_smorest",
         "isExtraImport": true,
@@ -106,37 +74,12 @@
         "documentation": {}
     },
     {
-        "label": "Image",
-        "importPath": "PIL",
-        "description": "PIL",
-        "isExtraImport": true,
-        "detail": "PIL",
-        "documentation": {}
-    },
-    {
         "label": "numpy",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "numpy",
         "description": "numpy",
         "detail": "numpy",
-        "documentation": {}
-    },
-    {
-        "label": "torch",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "torch",
-        "description": "torch",
-        "detail": "torch",
-        "documentation": {}
-    },
-    {
-        "label": "Enum",
-        "importPath": "enum",
-        "description": "enum",
-        "isExtraImport": true,
-        "detail": "enum",
         "documentation": {}
     },
     {
@@ -185,41 +128,6 @@
         "description": "marshmallow",
         "isExtraImport": true,
         "detail": "marshmallow",
-        "documentation": {}
-    },
-    {
-        "label": "scraper_bp",
-        "importPath": "services.scraper",
-        "description": "services.scraper",
-        "isExtraImport": true,
-        "detail": "services.scraper",
-        "documentation": {}
-    },
-    {
-        "label": "extract_text",
-        "kind": 2,
-        "importPath": "services.scraper",
-        "description": "services.scraper",
-        "peekOfCode": "def extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'Teste'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    image_np = np.array(image)\n    match ocr_type.lower():\n        case 'easyocr':",
-        "detail": "services.scraper",
-        "documentation": {}
-    },
-    {
-        "label": "scraper_bp",
-        "kind": 5,
-        "importPath": "services.scraper",
-        "description": "services.scraper",
-        "peekOfCode": "scraper_bp = Blueprint(\"scraper\", __name__, description=\"Operações de OCR\")\neasyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\ndef extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'Teste'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''",
-        "detail": "services.scraper",
-        "documentation": {}
-    },
-    {
-        "label": "easyocr_reader",
-        "kind": 5,
-        "importPath": "services.scraper",
-        "description": "services.scraper",
-        "peekOfCode": "easyocr_reader = easyocr.Reader(['en', 'pt'])\n@scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])\ndef extract_text(ocr_type):\n    print(torch.cuda.is_available())\n    if 'image' not in request.files:\n        return jsonify({'error': 'Teste'}), 400\n    file = request.files['image']\n    image = Image.open(file)\n    extracted_text = ''\n    image_np = np.array(image)",
-        "detail": "services.scraper",
         "documentation": {}
     },
     {
@@ -346,69 +254,6 @@
         "description": "src.schemas",
         "peekOfCode": "class ScraperFile(Schema):\n    extractedText = fields.Str(required=True)\n    ocrType = fields.Str(required=True)",
         "detail": "src.schemas",
-        "documentation": {}
-    },
-    {
-        "label": "app",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "app = Flask(__name__)\napp.config[\"PROPAGATE_EXCEPTIONS\"] = True\napp.config[\"API_TITLE\"] = \"Scraper\"\napp.config[\"API_VERSION\"] = \"v1\"\napp.config[\"OPENAPI_VERSION\"] = \"3.0.3\"\napp.config[\"OPENAPI_URL_PREFIX\"] = \"/\"\napi = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "app.config[\"PROPAGATE_EXCEPTIONS\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "app.config[\"PROPAGATE_EXCEPTIONS\"] = True\napp.config[\"API_TITLE\"] = \"Scraper\"\napp.config[\"API_VERSION\"] = \"v1\"\napp.config[\"OPENAPI_VERSION\"] = \"3.0.3\"\napp.config[\"OPENAPI_URL_PREFIX\"] = \"/\"\napi = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "app.config[\"API_TITLE\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "app.config[\"API_TITLE\"] = \"Scraper\"\napp.config[\"API_VERSION\"] = \"v1\"\napp.config[\"OPENAPI_VERSION\"] = \"3.0.3\"\napp.config[\"OPENAPI_URL_PREFIX\"] = \"/\"\napi = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "app.config[\"API_VERSION\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "app.config[\"API_VERSION\"] = \"v1\"\napp.config[\"OPENAPI_VERSION\"] = \"3.0.3\"\napp.config[\"OPENAPI_URL_PREFIX\"] = \"/\"\napi = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "app.config[\"OPENAPI_VERSION\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "app.config[\"OPENAPI_VERSION\"] = \"3.0.3\"\napp.config[\"OPENAPI_URL_PREFIX\"] = \"/\"\napi = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "app.config[\"OPENAPI_URL_PREFIX\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "app.config[\"OPENAPI_URL_PREFIX\"] = \"/\"\napi = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "api",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "api = Api(app)\napi.register_blueprint(scraper_bp)",
-        "detail": "app",
         "documentation": {}
     }
 ]
