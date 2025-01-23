@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                <button v-if="!showLoading" type="button" v-on:click="scrap" class="btn btn-primary btn-lg">Executar</button>
+                <button v-if="!showLoading && image != false" type="button" v-on:click="scrap" class="btn btn-primary btn-lg">Executar</button>
 
                 <div v-if="textScraped !== ''">
                     <hr class="w-100 bg-white text-white my-4">
@@ -42,8 +42,9 @@
                         <h5 class="text-white" for="exampleFormControlTextarea1">Resultado</h5>
                     </div>
 
+
                     <div class="form-group">
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" cols="50">{{textScraped}}</textarea>
+                        <textarea v-model="textScraped" class="form-control" id="exampleFormControlTextarea1" rows="15" cols="50"></textarea>
                     </div>
                 </div>
             </div>
@@ -73,9 +74,10 @@ var app = new Vue({
                   'Content-Type': 'multipart/form-data'
                 }
             })
-
+          
             this.showLoading = false
-
+            this.image = false
+           
             this.textScraped = response.data.extractedText
         },
 

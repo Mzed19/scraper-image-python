@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from flask_smorest import Blueprint
 import easyocr
 import pytesseract
@@ -10,6 +10,10 @@ from src.domain.enums.scraper_libs import ScraperLibs
 scraper_bp = Blueprint("scraper", __name__, description="Operações de OCR")
 
 easyocr_reader = easyocr.Reader(['en', 'pt'])
+
+@scraper_bp.route('/')
+def index():
+    return render_template('index.html', metrics={})
 
 @scraper_bp.route('/extract-text/<string:ocr_type>', methods=['POST'])
 @scraper_bp.response(200, ScraperFile)
