@@ -10,7 +10,7 @@ Download and help improve this tool.
 
 #How Use
 
-- Endpoints: extract-text/easyocr or extract-text/pytesseract.
-- Put a file image in a field called ¨image¨ and make a request.
+- Access frontend with: http://127.0.0.1:5000/
+- Endpoints: extract-text/easyocr or extract-text/pytesseract, put a file image in a field called "image" and make a request.
 
 You can see more about this on link: https://medium.com/@mdumont567/tool-for-scraping-text-from-images-with-versatility-f370dfff44bf
