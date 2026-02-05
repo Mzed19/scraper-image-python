@@ -67,18 +67,24 @@ var app = new Vue({
             const formData = new FormData();
             formData.append('image', this.image);
 
-            this.showLoading = true
+            this.showLoading = true;
+            this.textScraped = "";
 
-            response = await axios.post('http://localhost:5000/extract-text/'+this.library, formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-            })
-          
-            this.showLoading = false
-            this.image = false
-           
-            this.textScraped = response.data.extractedText
+            try {
+                const response = await axios.post('http://localhost:5000/extract-text/' + this.library, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                
+                this.textScraped = response.data.extractedText;
+            } catch (error) {
+                console.error("Erro na extração:", error);
+                alert("Erro ao processar arquivo. Verifique o console do servidor.");
+            } finally {
+                this.showLoading = false;
+                this.image = false;
+            }
         },
 
         selectImage(event){
