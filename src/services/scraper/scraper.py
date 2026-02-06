@@ -1,4 +1,5 @@
 import io
+import os
 import cv2
 import numpy as np
 import pdfplumber
@@ -8,9 +9,12 @@ from PIL import Image
 from flask import request, jsonify, render_template
 from flask_smorest import Blueprint
 from pdf2image import convert_from_bytes
-
+from google import genai
 from src.schemas import ScraperFile
 from src.domain.enums.scraper_libs import ScraperLibs
+from dotenv import load_dotenv
+from google.genai import types
+import tempfile
 
 scraper_bp = Blueprint("scraper", __name__, description="Operações de OCR de alta precisão")
 
@@ -86,6 +90,11 @@ def extract_text(ocr_type):
                 res = pytesseract.image_to_string(img_cleaned, config=config)
                 extracted_chunks.append(res)
 
+            elif ocr_type.lower() == ScraperLibs.GEMINI.value:
+                res = gemini_ocr(img)
+                extracted_chunks.append(res)
+
+
         return {
             'ocrType': ocr_type,
             'extractedText': "\n".join(extracted_chunks).strip()
@@ -94,3 +103,19 @@ def extract_text(ocr_type):
     except Exception as e:
         print(f"Erro interno: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    
+def gemini_ocr(pil_image):
+    load_dotenv()
+    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+    try:
+        prompt = "Analise esta imagem e extraia todo o texto visível. Mantenha a formatação original."
+
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview", contents=[prompt, pil_image]
+        )
+        
+        return response.text
+
+    except Exception as e:
+        return f"Erro no Gemini OCR: {str(e)}"
