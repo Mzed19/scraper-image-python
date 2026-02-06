@@ -137,6 +137,10 @@
                         <input class="form-check-input" v-model="library" type="radio" id="inlineRadio2" value="easyocr">
                         <label for="inlineRadio2">Easy OCR</label>
                     </div>
+                    <div class="library-option">
+                        <input class="form-check-input" v-model="library" type="radio" id="inlineRadio3" value="gemini">
+                        <label for="inlineRadio3">Gemini (gemini-3-flash-preview)</label>
+                    </div>
                 </div>
 
                 <div class="file-input-wrapper">
@@ -154,7 +158,7 @@
                     <span style="margin-left: 15px; color: #667eea; font-weight: 600;">Processando imagem...</span>
                 </div>
 
-                <button v-if="!showLoading && image != false" type="button" v-on:click="scrap" class="btn btn-execute">
+                <button v-if="!showLoading && image != false" type="button" v-on:click="scrap" class="text-white btn btn-execute">
                     <i class="bi bi-play-fill"></i> Executar Extração
                 </button>
 
@@ -202,7 +206,6 @@ var app = new Vue({
                 alert("Erro ao processar arquivo. Verifique o console do servidor.");
             } finally {
                 this.showLoading = false;
-                this.image = false;
             }
         },
 
