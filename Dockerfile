@@ -1,4 +1,6 @@
 FROM python:3.10
+ENV FLASK_APP=src/app
+ENV FLASK_DEBUG=1
 EXPOSE 5000
 WORKDIR /app
 COPY requirements.txt .

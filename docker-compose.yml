@@ -2,6 +2,9 @@ version: '30'
 services:
   web:
     build: .
+    environment:
+      - FLASK_APP=src/app
+      - FLASK_DEBUG=1
     ports:
       - "5000:5000"
     volumes:
