@@ -1,219 +1,510 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrapper</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="/static/icons/ocr_icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-base: #0d0f13;
+            --bg-surface: #13161d;
+            --bg-elevated: #1a1e28;
+            --bg-input: #1e2230;
+            --border-subtle: #2a2f3e;
+            --border-muted: #363c50;
+            --accent: #f97316;
+            --accent-glow: rgba(249, 115, 22, 0.18);
+            --accent-hover: #fb923c;
+            --text-primary: #f0f2f8;
+            --text-secondary: #9aa0b4;
+            --text-muted: #5c637a;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: var(--bg-base);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            padding-bottom: 60px;
         }
-        .card-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            margin-top: 30px;
+
+        /* ── Noise texture overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
         }
-        .header-title {
-            color: white;
-            font-weight: 700;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
         }
-        .library-selector {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .library-option {
+
+        /* ── Header ── */
+        .page-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            cursor: pointer;
+            gap: 14px;
+            padding: 40px 0 28px;
         }
-        .library-option input {
-            cursor: pointer;
-            width: 20px;
-            height: 20px;
+
+        .header-icon {
+            width: 46px;
+            height: 46px;
+            background: var(--accent-glow);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--accent);
+            flex-shrink: 0;
         }
-        .library-option label {
-            cursor: pointer;
+
+        .page-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
             margin: 0;
-            font-weight: 500;
-            color: #333;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
         }
-        .file-input-wrapper {
-            margin-bottom: 25px;
+
+        .page-header p {
+            margin: 2px 0 0;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 400;
         }
-        .form-control {
-            border: 2px solid #667eea;
-            padding: 12px 15px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+
+        /* ── Card ── */
+        .card-dark {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 36px 40px;
+            transition: border-color 0.2s;
         }
-        .form-control:focus {
-            border-color: #764ba2;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+
+        .card-dark:hover {
+            border-color: var(--border-muted);
         }
-        .btn-execute {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            padding: 12px 40px;
+
+        /* ── Section label ── */
+        .section-label {
+            font-size: 0.72rem;
             font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            width: 100%;
-        }
-        .btn-execute:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-            color: white;
-        }
-        .loading-spinner {
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 14px;
             display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-subtle);
+        }
+
+        /* ── Radio group ── */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
+        .radio-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            user-select: none;
+        }
+
+        .radio-chip:hover {
+            border-color: var(--border-muted);
+            background: var(--bg-input);
+        }
+
+        .radio-chip input[type="radio"] {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--border-muted);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+
+        .radio-chip input[type="radio"]:checked {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .radio-chip:has(input:checked) {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+
+        .radio-chip label {
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0;
+            color: inherit;
+        }
+
+        /* ── File drop zone ── */
+        .drop-zone {
+            border: 1.5px dashed var(--border-muted);
+            border-radius: 12px;
+            padding: 28px 24px;
+            text-align: center;
+            background: var(--bg-elevated);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .drop-zone-icon {
+            font-size: 2rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+
+        .drop-zone:hover .drop-zone-icon {
+            color: var(--accent);
+        }
+
+        .drop-zone-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .drop-zone-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .privacy-note {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+
+        /* ── Button ── */
+        .btn-run {
+            width: 100%;
+            margin-top: 28px;
+            padding: 13px 24px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(249, 115, 22, 0.25);
+            letter-spacing: 0.01em;
         }
-        .result-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
+
+        .btn-run:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(249, 115, 22, 0.35);
         }
+
+        .btn-run:active {
+            transform: translateY(0);
+        }
+
+        /* ── Spinner ── */
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 28px 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .spinner-ring {
+            width: 24px;
+            height: 24px;
+            border: 2.5px solid var(--border-muted);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Result ── */
+        .result-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 32px 40px;
+            margin-top: 20px;
+            animation: fadeUp 0.25s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .result-header {
-            color: #667eea;
-            font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 18px;
         }
-        .textarea-result {
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            background: #f8f9ff;
-            color: #333;
+
+        .result-badge {
+            width: 28px;
+            height: 28px;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success);
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
-        .textarea-result:focus {
-            border-color: #764ba2;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .file-label {
+
+        .result-title {
+            font-size: 0.95rem;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 10px;
-            display: block;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .result-textarea {
+            width: 100%;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.825rem;
+            line-height: 1.65;
+            resize: vertical;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .result-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* ── Divider ── */
+        .divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 28px 0;
         }
     </style>
 </head>
+
 <body>
-    <div id="app">
-        <div class="container mt-5">
-            <h1 class="header-title mt-3">
-                <i class="bi bi-file-text"></i> Scrapper
-            </h1>
+    <div id="app" class="page-wrap">
+        <div class="container" style="max-width: 680px;">
 
-            <div class="card-container">
-                <div class="library-selector">
-                    <label style="margin: 0; color: #333; font-weight: 600;">Selecione a biblioteca:</label>
-                    <div class="library-option">
-                        <input class="form-check-input" v-model="library" type="radio" id="inlineRadio1" value="pytesseract">
-                        <label for="inlineRadio1">Py Tesseract</label>
-                    </div>
-                    <div class="library-option">
-                        <input class="form-check-input" v-model="library" type="radio" id="inlineRadio2" value="easyocr">
-                        <label for="inlineRadio2">Easy OCR</label>
-                    </div>
-                    <div class="library-option">
-                        <input class="form-check-input" v-model="library" type="radio" id="inlineRadio3" value="gemini">
-                        <label for="inlineRadio3">Gemini (gemini-3-flash-preview)</label>
-                    </div>
+            <!-- Header -->
+            <div class="page-header">
+                <div class="header-icon">
+                    <i class="bi bi-file-earmark-text-fill"></i>
                 </div>
-
-                <div class="file-input-wrapper">
-                    <label class="file-label"><i class="bi bi-image"></i> Selecione uma imagem ou pdf:</label>
-                    <div v-if="!showLoading" class="input-group">
-                        <input type="file" @change="selectImage" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.webp" aria-label="Selecionar imagem">
-                    </div>
-                    <p class="file-label">Fique tranquilo, nada será salvo no servidor.</p>
-                </div>
-
-                <div class="loading-spinner" v-if="showLoading">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Processando...</span>
-                    </div>
-                    <span style="margin-left: 15px; color: #667eea; font-weight: 600;">Processando imagem...</span>
-                </div>
-
-                <button v-if="!showLoading && image != false" type="button" v-on:click="scrap" class="text-white btn btn-execute">
-                    <i class="bi bi-play-fill"></i> Executar Extração
-                </button>
-
-                <div v-if="textScraped !== ''" class="result-section">
-                    <div class="result-header">
-                        <i class="bi bi-check-circle-fill"></i> Resultado da Extração
-                    </div>
-                    <div class="form-group">
-                        <textarea v-model="textScraped" class="form-control textarea-result" id="resultTextarea" rows="15" cols="50"></textarea>
-                    </div>
+                <div>
+                    <h1>OCR Scrapper</h1>
+                    <p>Extração de texto a partir de imagens e documentos PDF</p>
                 </div>
             </div>
+
+            <!-- Main card -->
+            <div class="card-dark">
+
+                <!-- Library selector -->
+                <p class="section-label"><i class="bi bi-cpu"></i> Motor de extração</p>
+                <div class="radio-group">
+                    <div class="radio-chip">
+                        <input v-model="library" type="radio" id="radio1" value="pytesseract">
+                        <label for="radio1">Py Tesseract</label>
+                    </div>
+                    <div class="radio-chip">
+                        <input v-model="library" type="radio" id="radio2" value="easyocr">
+                        <label for="radio2">Easy OCR</label>
+                    </div>
+                    <div class="radio-chip">
+                        <input v-model="library" type="radio" id="radio3" value="gemini">
+                        <label for="radio3">Gemini Flash</label>
+                    </div>
+                </div>
+
+                <!-- File input -->
+                <p class="section-label"><i class="bi bi-paperclip"></i> Arquivo</p>
+                <div v-if="!showLoading" class="drop-zone">
+                    <input type="file" @change="selectImage" accept=".pdf,.jpg,.jpeg,.png,.webp"
+                        aria-label="Selecionar arquivo">
+                    <div v-if="!image">
+                        <div class="drop-zone-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                        <p class="drop-zone-text">Arraste aqui ou clique para selecionar</p>
+                        <p class="drop-zone-hint">PDF, JPG, JPEG, PNG, WEBP</p>
+                    </div>
+                    <div v-else>
+                        <div class="drop-zone-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                        <textarea v-model="imageName" disabled class="result-textarea" id="resultTextarea" rows="2">
+                        </textarea>
+                    </div>
+
+                </div>
+
+                <!-- Privacy note -->
+                <div class="privacy-note">
+                    <i class="bi bi-shield-check"></i>
+                    Nenhum arquivo é armazenado no servidor.
+                </div>
+
+                <!-- Spinner -->
+                <div v-if="showLoading" class="loading-state">
+                    <div class="spinner-ring"></div>
+                    <span>Processando imagem…</span>
+                </div>
+
+                <!-- Run button -->
+                <button v-if="!showLoading && image != false" type="button" v-on:click="scrap" class="btn-run">
+                    <i class="bi bi-play-fill"></i> Executar Extração
+                </button>
+            </div>
+
+            <!-- Result card -->
+            <div v-if="textScraped !== ''" class="result-card">
+                <div class="result-header">
+                    <div class="result-badge"><i class="bi bi-check-lg"></i></div>
+                    <p class="result-title">Resultado da Extração</p>
+                </div>
+                <textarea v-model="textScraped" class="result-textarea" id="resultTextarea" rows="15">
+                </textarea>
+            </div>
+
         </div>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-var app = new Vue({
-    el: '#app',
-    data: {
-        textScraped: "",
-        showLoading: false,
-        image: false,
-        library: 'easyocr'
-    },
-    methods: {
-        async scrap(event) {
-            const formData = new FormData();
-            formData.append('image', this.image);
 
-            this.showLoading = true;
-            this.textScraped = "";
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                textScraped: "",
+                showLoading: false,
+                image: false,
+                library: 'easyocr',
+                imageName: ""
+            },
+            methods: {
+                async scrap(event) {
+                    const formData = new FormData();
+                    formData.append('image', this.image);
 
-            try {
-                const response = await axios.post('http://localhost:5000/extract-text/' + this.library, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
+                    this.showLoading = true;
+                    this.textScraped = "";
+
+                    try {
+                        const response = await axios.post('http://localhost:5000/extract-text/' + this.library, formData, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                        });
+                        this.textScraped = response.data.extractedText;
+                    } catch (error) {
+                        console.error("Erro na extração:", error);
+                        alert("Erro ao processar arquivo. Verifique o console do servidor.");
+                    } finally {
+                        this.showLoading = false;
                     }
-                });
-                
-                this.textScraped = response.data.extractedText;
-            } catch (error) {
-                console.error("Erro na extração:", error);
-                alert("Erro ao processar arquivo. Verifique o console do servidor.");
-            } finally {
-                this.showLoading = false;
-            }
-        },
+                },
 
-        selectImage(event){
-            this.image = event.target.files[0]
-        }
-    }
-})
-</script>
+                selectImage(event) {
+                    this.image = event.target.files[0];
+                    this.imageName = this.image.name;
+                }
+            }
+        })
+    </script>
 </body>
+
 </html>

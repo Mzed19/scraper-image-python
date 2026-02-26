@@ -107,7 +107,7 @@ def extract_text(ocr_type):
 def gemini_ocr(pil_image):
     load_dotenv()
     client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-
+    
     try:
         prompt = "Analise esta imagem e extraia todo o texto visível. Mantenha a formatação original."
 
