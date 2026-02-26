@@ -17,4 +17,6 @@ RUN apt-get update && apt-get install -y \
 
 COPY . .
 CMD ["tail", "-f", "/dev/null"]
-# execute after up container flask run --host 0.0.0.0
+# execute after up container
+# install dependencies: pip install -r requirements.txt
+# then run: flask run --host 0.0.0.0
