@@ -11,3 +11,4 @@ pdfplumber
 Pillow
 numpy
 google-genai
+gunicorn
